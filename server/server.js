@@ -5,6 +5,9 @@ const opcua = require("node-opcua");
 const conn_par = {
     port: 5000,
     resourcePath: "/UA/IndustrialInformaticsServer",
+    // @TODO: add certificate file and private key file
+    // certificateFile: "certificates/cert.pem",
+    // privateKeyFile: "certificates/key.pem",
     buildInfo: {
         productName: "OPCUAProjectServer",
         buildNumber: "1",
