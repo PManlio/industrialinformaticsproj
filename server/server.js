@@ -16,16 +16,15 @@ const conn_par = {
 let server = new opcua.OPCUAServer(conn_par);
 
 
-// questa funzione non worka da errore nel bookmark @error
 let build_my_address_space = (server) => {
     const addressSpace = server.engine.addressSpace;
     const namespace = addressSpace.getOwnNamespace();
 
     // qui bisogna dichiarare i nuovi oggetti
     // per esempio, per ora prendiamo il nome del device in cui runna il server
-    let device = namespace.addObject({ // @error
+    const device = namespace.addObject({
         organizedBy: addressSpace.rootFolder.objects,
-        browserName: "myServerDevice",
+        browseName: "MyObjectDevice",
     });
 
 
@@ -33,7 +32,7 @@ let build_my_address_space = (server) => {
     // ad esempio, per ora aggiungiamo la variabile riguardante l'architettura del server
     namespace.addVariable({
         propertyOf: device, // con propertyOf abbiamo collegato la variabile all'oggetto device (definito sopra)
-        browserName: "CPU_Architecture",
+        browseName: "CPU_Architecture",
         dataType: "String",
         value: {
             get: () => {
@@ -51,11 +50,11 @@ let build_my_address_space = (server) => {
 
 // inizializzazione del server
 server.initialize(() => {
-    console.log(`OPCUA server start init--`)
+    console.log(`OPCUA server start init--`);
 
     // riempiamo l'address space (è una callback)
     build_my_address_space(server);
-    console.log("Address space initialized. Starting server...")
+    console.log("Address space initialized. Starting server...");
 
     // avviamo il server:
     server.start(() => {
