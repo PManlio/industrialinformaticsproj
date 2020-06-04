@@ -4,9 +4,9 @@ const opcua = require("node-opcua");
 // parametri da passare per la creazione del server
 const conn_par = {
     port: 5000,
-    resourcePath: "",
+    resourcePath: "/UA/IndustrialInformaticsServer",
     buildInfo: {
-        productName: "OPCUAserver",
+        productName: "OPCUAProjectServer",
         buildNumber: "1",
         buildDate: new Date()
     }
