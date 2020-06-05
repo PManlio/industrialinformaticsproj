@@ -12,6 +12,7 @@
     "license": "ISC",
     "dependencies": {
         "node-opcua": "^2.6.1",
-        "source-map-support": "^0.5.19"
+        "source-map-support": "^0.5.19",
+        "unirest": "^0.6.0"
     }
 }
