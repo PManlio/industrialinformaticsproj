@@ -20,8 +20,60 @@ let getWeather = async (city) => {
     if (result.status !== 200) {
         throw new Error("API error");
     }
-    // return result.body;
-    console.log(result.body)
+    return result.body;
+    // console.log(result.body)
 }
 
-getWeather(`Catania`);
+function unixEpoqToDate(unixDate) {
+    const d = new Date(0);
+    d.setUTCSeconds(unixDate);
+    return d;
+}
+
+/*
+function extractUsefulData(data) {
+    //await data;
+    return  {
+        city:               data.city,
+        date:               new Date(),
+        observation_time:   unixEpoqToDate(data.dt),
+        temperature:        data.main.temp,
+        humidity:           data.main.humidity,
+        pressure:           data.main.pressure,
+        weather:            data.weather[0].main
+    };
+}
+
+//console.log(extractUsefulData(await getWeather('Catania')));
+
+const esecuzione = async () => {
+    const data = await getWeather('Catania');
+    console.log(`
+    city:               ${data.city},
+    date:               ${new Date()},
+    observation_time:   ${unixEpoqToDate(data.dt)},
+    temperature:        ${data.main.temp},
+    humidity:           ${data.main.humidity},
+    pressure:           ${data.main.pressure},
+    weather:            ${data.weather[0].main}
+    `);
+}
+*/
+
+let extractUsefulData = async () => {
+    let data = await getWeather('Catania');
+    return  {
+        city:               data.city,
+        date:               new Date(),
+        observation_time:   unixEpoqToDate(data.dt),
+        temperature:        data.main.temp,
+        humidity:           data.main.humidity,
+        pressure:           data.main.pressure,
+        weather:            data.weather[0].main
+    };
+}
+
+(async function execution() {
+    const roba = await extractUsefulData();
+    console.log(roba);
+})();
