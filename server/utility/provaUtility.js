@@ -11,8 +11,6 @@ let getWeather = async (city) => {
         unirest.get(
             `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`
             )
-            //.header("X-RapidAPI-Host", "community-open-weather-map.p.rapidapi.com")
-            //.header("X-RapidAPI-Key", key)
             .end(
                 (response) => resolve(response)
             );
@@ -24,42 +22,14 @@ let getWeather = async (city) => {
     // console.log(result.body)
 }
 
+// funzione per sistemare la data
 function unixEpoqToDate(unixDate) {
     const d = new Date(0);
     d.setUTCSeconds(unixDate);
     return d;
 }
 
-/*
-function extractUsefulData(data) {
-    //await data;
-    return  {
-        city:               data.city,
-        date:               new Date(),
-        observation_time:   unixEpoqToDate(data.dt),
-        temperature:        data.main.temp,
-        humidity:           data.main.humidity,
-        pressure:           data.main.pressure,
-        weather:            data.weather[0].main
-    };
-}
-
-//console.log(extractUsefulData(await getWeather('Catania')));
-
-const esecuzione = async () => {
-    const data = await getWeather('Catania');
-    console.log(`
-    city:               ${data.city},
-    date:               ${new Date()},
-    observation_time:   ${unixEpoqToDate(data.dt)},
-    temperature:        ${data.main.temp},
-    humidity:           ${data.main.humidity},
-    pressure:           ${data.main.pressure},
-    weather:            ${data.weather[0].main}
-    `);
-}
-*/
-
+// funzione per l'elaborazione dei dati sotto forma di oggetto
 let extractUsefulData = async () => {
     let data = await getWeather('Catania');
     return  {
@@ -73,6 +43,7 @@ let extractUsefulData = async () => {
     };
 }
 
+// funzione eseguibile da esportare
 module.exports = async function execution() {
     const roba = await extractUsefulData();
     console.log(roba);
