@@ -1,5 +1,6 @@
-const os = require("os");
-const opcua = require("node-opcua");
+let os = require("os");
+let opcua = require("node-opcua");
+let util = require("./utility");
 
 // parametri da passare per la creazione del server
 const conn_par = {
