@@ -73,7 +73,7 @@ let extractUsefulData = async () => {
     };
 }
 
-(async function execution() {
+module.exports = async function execution() {
     const roba = await extractUsefulData();
     console.log(roba);
-})();
+}
