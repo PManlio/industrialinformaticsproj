@@ -40,34 +40,6 @@ let build_my_address_space = (server) => {
 
     namespace.addVariable({
         propertyOf: device,
-        browseName: "Date",
-        dataType: "Date",
-        value: {
-            get: () => {
-                return new opcua.Variant({ 
-                    dataType: opcua.DataType.Date, 
-                    value: data_weather.date,
-                });
-            },
-        }
-    });
-
-    namespace.addVariable({
-        propertyOf: device,
-        browseName: "observation_time",
-        dataType: "date",
-        value: {
-            get: () => {
-                return new opcua.Variant({ 
-                    dataType: opcua.DataType.date, 
-                    value: data_weather.observation_time,
-                });
-            },
-        }
-    });
-
-    namespace.addVariable({
-        propertyOf: device,
         browseName: "temperature",
         dataType: "Double",
         value: {
@@ -76,7 +48,7 @@ let build_my_address_space = (server) => {
                     dataType: opcua.DataType.Double, 
                     value: data_weather.temperature,
                 });
-            },
+            }
         }
     });
 
@@ -90,7 +62,7 @@ let build_my_address_space = (server) => {
                     dataType: opcua.DataType.Double, 
                     value: data_weather.humidity,
                 });
-            },
+            }
         }
     });
 
@@ -104,7 +76,7 @@ let build_my_address_space = (server) => {
                     dataType: opcua.DataType.String, 
                     value: data_weather.weather,
                 });
-            },
+            }
         }
     });
 }
