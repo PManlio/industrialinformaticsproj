@@ -1,6 +1,5 @@
-let os = require("os");
-let opcua = require("node-opcua");
-let util = require("./utility");
+const opcua = require("node-opcua");
+const meteoParser = require("./utility/meteoParser.js")
 
 // parametri da passare per la creazione del server
 const conn_par = {
@@ -46,7 +45,47 @@ let build_my_address_space = (server) => {
                 });
             },
         }
-    })
+    });
+
+    // temperatura
+    namespace.addVariable({
+        componentOf: device,
+        browseName: "temperature",
+        dataType: "Float",
+        value: {
+            get: meteoParser.getTemperature()
+        }
+    });
+
+    // umidità
+    namespace.addVariable({
+        componentOf: device,
+        browseName: "humidity",
+        dataType: "Double",
+        value: {
+            get: meteoParser.getHumidity()
+        }
+    });
+
+    // pressione
+    namespace.addVariable({
+        componentOf: device,
+        browseName: "pressure",
+        dataType: "Double",
+        value: {
+            get: meteoParser.getPressure()
+        }
+    });
+
+    // tempo
+    namespace.addVariable({
+        componentOf: device,
+        browseName: "weather",
+        dataType: "String",
+        value: {
+            get: meteoParser.getWeather()
+        }
+    });
 
     // qui si aggiungono le variabili che dipendono dall'ambiente in cui runna il server
 

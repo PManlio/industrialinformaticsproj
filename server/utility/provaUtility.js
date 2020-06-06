@@ -1,7 +1,7 @@
 // node provaUtility.js
 
 const fs = require("fs");
-const key = fs.readFileSync("openWeatherAPI.key");
+const key = fs.readFileSync("./utility/openWeatherAPI.key");
 const unirest = require("unirest");
 
 //funzione per il recupero delle previsioni meteo
@@ -46,5 +46,6 @@ let extractUsefulData = async () => {
 // funzione eseguibile da esportare
 module.exports = async function execution() {
     const roba = await extractUsefulData();
-    console.log(roba);
+    return roba;
+    // console.log(roba);
 }
