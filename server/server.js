@@ -49,7 +49,7 @@ let build_my_address_space = (server) => {
 
     // temperatura
     namespace.addVariable({
-        componentOf: device,
+        componentOf: device, // probabilmente è propertyOf, dato che "component" si riferisce più ad un elemento hw
         browseName: "temperature",
         dataType: "Float",
         value: {
@@ -59,7 +59,7 @@ let build_my_address_space = (server) => {
 
     // umidità
     namespace.addVariable({
-        componentOf: device,
+        componentOf: device, // probabilmente è propertyOf, dato che "component" si riferisce più ad un elemento hw
         browseName: "humidity",
         dataType: "Double",
         value: {
@@ -69,7 +69,7 @@ let build_my_address_space = (server) => {
 
     // pressione
     namespace.addVariable({
-        componentOf: device,
+        componentOf: device, // probabilmente è propertyOf, dato che "component" si riferisce più ad un elemento hw
         browseName: "pressure",
         dataType: "Double",
         value: {
@@ -79,7 +79,7 @@ let build_my_address_space = (server) => {
 
     // tempo
     namespace.addVariable({
-        componentOf: device,
+        componentOf: device, // probabilmente è propertyOf, dato che "component" si riferisce più ad un elemento hw
         browseName: "weather",
         dataType: "String",
         value: {
