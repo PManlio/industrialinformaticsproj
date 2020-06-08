@@ -1,19 +1,7 @@
-let os = require("os");
-let opcua = require("node-opcua");
-let getWeather = require("./utility/provaUtility");
+const opcua = require("node-opcua");
+const meteoParser = require("./utility/meteoParser.js")
 
-data_weather = {};
-data_weather = getWeather();
-//data_weather structure:
-/* {
-    date:               new Date(),
-    observation_time:   unixEpoqToDate(data.dt),
-    temperature:        data.main.temp,
-    humidity:           data.main.humidity,
-    weather:            data.weather[0].main
-}; */
-
-//connection parameters
+// parametri da passare per la creazione del server
 const conn_par = {
     port: 5000,
     resourcePath: "/UA/IndustrialInformaticsServer",
@@ -24,71 +12,120 @@ const conn_par = {
     }
 };
 
-//OPCUAserver instance creation
+// creazione del server, con passaggio di parametri
 let server = new opcua.OPCUAServer(conn_par);
 
-//address space creation
+
 let build_my_address_space = (server) => {
     const addressSpace = server.engine.addressSpace;
     const namespace = addressSpace.getOwnNamespace();
 
-    //new object declaration
+    //dichiarare i nuovi oggetti
     const device = namespace.addObject({
         organizedBy: addressSpace.rootFolder.objects,
         browseName: "MyObjectDevice",
     });
 
+
+    // variabili
+    // temperatura
     namespace.addVariable({
-        propertyOf: device,
+        componentOf: device,
         browseName: "temperature",
-        dataType: "Double",
+        nodeId: "s=Temperature",
+        dataType: "Float",
+
         value: {
-            get: () => {
-                return new opcua.Variant({ 
-                    dataType: opcua.DataType.Double, 
-                    value: data_weather.temperature,
+            refreshFunc: function(callback) {
+
+                let temperature = meteoParser.getTemperature();
+                let DataValue = new opcua.DataValue({
+                     value: new opcua.Variant({ dataType: opcua.DataType.Float, value: temperature}),
+                     statusCode: opcua.StatusCodes.Good,
+                     sourceTimestamp: new Date()
                 });
+                
+                callback(null, DataValue);
             }
         }
     });
 
+    // umidità
     namespace.addVariable({
-        propertyOf: device,
+        componentOf: device,
         browseName: "humidity",
+        nodeId: "s=Humidity",
         dataType: "Double",
+
         value: {
-            get: () => {
-                return new opcua.Variant({ 
-                    dataType: opcua.DataType.Double, 
-                    value: data_weather.humidity,
+            refreshFunc: function(callback) {
+
+                let humidity = meteoParser.getHumidity();
+                let DataValue = new opcua.DataValue({
+                     value: new opcua.Variant({ dataType: opcua.DataType.Double, value: humidity}),
+                     statusCode: opcua.StatusCodes.Good,
+                     sourceTimestamp: new Date()
                 });
+
+                callback(null, DataValue);
             }
         }
     });
 
+    // pressione
     namespace.addVariable({
-        propertyOf: device,
-        browseName: "weather",
-        dataType: "String",
+        componentOf: device,
+        browseName: "pressure",
+        nodeId: "s=Pressure",
+        dataType: "Double",
+
         value: {
-            get: () => {
-                return new opcua.Variant({ 
-                    dataType: opcua.DataType.String, 
-                    value: data_weather.weather,
+            refreshFunc: function(callback) {
+
+                let pressure = meteoParser.getPressure();
+                let DataValue = new opcua.DataValue({
+                     value: new opcua.Variant({ dataType: opcua.DataType.Double, value: pressure}),
+                     statusCode: opcua.StatusCodes.Good,
+                     sourceTimestamp: new Date()
                 });
+                
+                callback(null, DataValue);
+            }
+        }
+    });
+
+    // tempo
+    namespace.addVariable({
+        componentOf: device,
+        browseName: "weather",
+        nodeId: "s=Weather",
+        dataType: "String",
+
+        value: {
+            refreshFunc: function(callback) {
+
+                let weahter = meteoParser.getWeather();
+                let DataValue = new opcua.DataValue({
+                     value: new opcua.Variant({ dataType: opcua.DataType.String, value: weahter}),
+                     statusCode: opcua.StatusCodes.Good,
+                     sourceTimestamp: new Date()
+                });
+                
+                callback(null, DataValue);
             }
         }
     });
 }
 
-//server initilaization
+// inizializzazione del server
 server.initialize(() => {
     console.log(`OPCUA server start init--`);
 
+    // riempiamo l'address space
     build_my_address_space(server);
     console.log("Address space initialized. Starting server...");
 
-    //server start
+    // avviamo il server:
     server.start(() => {
         console.log(`Server started.
         listening to port: 
