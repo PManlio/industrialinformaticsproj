@@ -4,5 +4,6 @@ let password = 'passw0rd'
 let dbname = 'industrialInformatics';
 
 module.exports = {
-    uri: `mongodb+srv://${usrname}:${password}@${hostname}/${dbname}?retryWrites=true&w=majority`
+    uri: `mongodb+srv://${usrname}:${password}@${hostname}/${dbname}?retryWrites=true&w=majority`,
+    dbn: dbname 
 }
