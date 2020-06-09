@@ -1,7 +1,8 @@
 let hostname = 'cluster-industrialinformatics-txsew.mongodb.net';
-// let port = '';
+let usrname = 'manlio';
+let password = 'passw0rd'
 let dbname = 'industrialInformatics';
 
 module.exports = {
-    url: `mongodb+srv://${hostname}/${dbname}`
+    uri: `mongodb+srv://${usrname}:${password}@${hostname}/${dbname}?retryWrites=true&w=majority`
 }

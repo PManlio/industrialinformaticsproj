@@ -1,5 +1,11 @@
-const mongoose = require('../../node_modules/mongoose');
-const mongourl = require('./db.js');
+const MongoClient = require('../../node_modules/mongodb').MongoClient;
+const mongouri = require('./db.js');
 
-mongoose.connect(mongourl.url, {useNewUrlParser: true});
+const client = new MongoClient(mongouri, { useNewUrlParser: true });
+client.connect(err => {
+  const collection = client.db("industrialInformatics").collection("user");
+  // perform actions on the collection object
+  
+  client.close();
+});
 
