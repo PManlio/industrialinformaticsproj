@@ -1,11 +1,12 @@
 // node provaUtility.js
 
 const fs = require("fs");
-const key = fs.readFileSync("./utility/openWeatherAPI.key");
+const key = fs.readFileSync("./openWeatherAPI.key");
 const unirest = require("unirest");
+const cities = require("./cities_list");
 
 //funzione per il recupero delle previsioni meteo
-let getWeather = async (city) => {
+let getCityWeather = async (city) => {
 
     let result = await new Promise((resolve) => {
         unirest.get(
@@ -19,33 +20,67 @@ let getWeather = async (city) => {
         throw new Error("API error");
     }
     return result.body;
-    // console.log(result.body)
 }
 
-// funzione per sistemare la data
+// funzione per correggere data
 function unixEpoqToDate(unixDate) {
     const d = new Date(0);
     d.setUTCSeconds(unixDate);
     return d;
 }
 
-// funzione per l'elaborazione dei dati sotto forma di oggetto
-let extractUsefulData = async () => {
-    let data = await getWeather('Catania');
+// funzione per l'estrazione dei dati interessanti
+function extractUsefulData(data) {
     return  {
-        city:               data.city,
+        city:               data.name,
         date:               new Date(),
         observation_time:   unixEpoqToDate(data.dt),
         temperature:        data.main.temp,
         humidity:           data.main.humidity,
-        pressure:           data.main.pressure,
         weather:            data.weather[0].main
     };
 }
 
-// funzione eseguibile da esportare
-module.exports = async function execution() {
-    const roba = await extractUsefulData();
-    return roba;
-    // console.log(roba);
+
+// mando chiamate API periodicamente, evitando di intasare il web-server
+/* let catania_data = {};
+setInterval(async () => {
+   catania_data = extractUsefulData(await getCityWeather("Catania"));
+   console.log(catania_data);
+},5*1000); */
+
+
+// costruisco una map in cui raccogliere le informazioni di ogni citta
+city_map = [];
+
+const next_city  = ((arr) => {
+    let counter = arr.length;
+    return function() {
+       counter += 1;
+       if (counter>=arr.length) {
+         counter = 0;
+       }
+       return arr[counter];
+    };
+})(cities);
+
+ async function update_city_data(city) {
+
+    try {
+        const data  = await getCityWeather(city);
+        city_map[city] = extractUsefulData(data);
+    }
+    catch(err) {
+        console.log("error city",city , err);
+        return ;
+    }
 }
+
+// effettuo una chiamata API ogni 5 secondi (non intaso il web server di richieste)
+setInterval(async () => {
+     const city = next_city();
+     console.log("updating city =",city);
+     console.log(city_map[city]);
+     await update_city_data(city);
+}, 5*1000);
+
