@@ -45,5 +45,4 @@ module.exports = async function execution() {
     const roba = await extractUsefulData();
     // console.log(roba);
     return roba;
-    // console.log(roba);
 }
