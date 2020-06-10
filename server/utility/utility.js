@@ -3,7 +3,7 @@ const os = require("os");
 const exec = require("child_process").exec;
 
 const fs = require("fs");
-const key = fs.readFileSync("openWeatherAPI.key");
+const key = fs.readFileSync("./utility/openWeatherAPI.key");
 const unirest = require("unirest");
 
 //funzione per il recupero delle previsioni meteo

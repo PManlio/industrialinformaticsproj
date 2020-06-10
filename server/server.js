@@ -51,9 +51,9 @@ let build_my_address_space = (server) => {
     namespace.addVariable({
         componentOf: device, // probabilmente è propertyOf, dato che "component" si riferisce più ad un elemento hw
         browseName: "temperature",
-        dataType: "Float",
+        dataType: "Double",
         value: {
-            get: meteoParser.getTemperature()
+            refreshFunc: meteoParser.getTemperature
         }
     });
 
@@ -63,7 +63,7 @@ let build_my_address_space = (server) => {
         browseName: "humidity",
         dataType: "Double",
         value: {
-            get: meteoParser.getHumidity()
+            refreshFunc: meteoParser.getHumidity
         }
     });
 
@@ -73,7 +73,7 @@ let build_my_address_space = (server) => {
         browseName: "pressure",
         dataType: "Double",
         value: {
-            get: meteoParser.getPressure()
+            refreshFunc: meteoParser.getPressure
         }
     });
 
@@ -83,7 +83,7 @@ let build_my_address_space = (server) => {
         browseName: "weather",
         dataType: "String",
         value: {
-            get: meteoParser.getWeather()
+            refreshFunc: meteoParser.getWeather
         }
     });
 
