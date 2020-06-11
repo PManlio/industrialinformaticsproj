@@ -1,3 +1,6 @@
-const esecuzione = require("./provaUtility.js")
+const provaUtility = require("./provaUtility.js");
 
-esecuzione();
+(async () => {
+    console.log(await provaUtility.execution("Catania"));
+})()
+

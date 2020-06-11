@@ -1,6 +1,7 @@
 const opcua = require("node-opcua");
-let getWeatherData = require("./utility/provaUtility");
+const parser = require("./utility/provaParser");
 const cities = require("./utility/cities_list");
+const getWeather = require("./utility/provaUtility");
 
 // parametri da passare per la creazione del server
 const conn_par = {
@@ -25,43 +26,105 @@ let build_my_address_space = (server) => {
         organizedBy: addressSpace.rootFolder.objects,
         browseName: "Cities"});
     
-    for (let city of cities) {
+    for (let city_name of cities) {
+
         const cityNode = namespace.addObject({
             organizedBy: citiesNode,
-            browseName: city});
+            browseName: city_name});
+
+            (async () => {
+                const city = await provaUtility.execution(city_name);
+            })()
+            
+
 
     // variabili
     // temperatura
     namespace.addVariable({
         componentOf: cityNode,
         browseName: "temperature",
-        nodeId: `s=${city}-Temperature`,
+        nodeId: `s=${city_name}-Temperature`,
         dataType: "Double",
-
-        value: {refreshFunc : getWeatherData(opcua.dataType.Double, city, "temperature") }
+    
+        value: {
+        refreshFunc: async (callback) => {
+          returnValue = await getWeather.execution(city_name);
+          let tempValue = parseFloat(returnValue.temperature)-273.15;
+          callback(null, new opcua.DataValue({
+                value: new opcua.Variant({dataType: opcua.DataType.Double, value: tempValue}),
+                statusCode: opcua.StatusCodes.Good,
+                sourceTimestamp: new Date(),
+              })
+            );
+        }
+      }
     });
 
-    // umidità
-    namespace.addVariable({
-        componentOf: cityNode,
-        browseName: "humidity",
-        nodeId: `s=${city}-Humidity`,
-        dataType: "Double",
+       // pressure
+   namespace.addVariable({
+    componentOf: cityNode,
+    browseName: "pressure",
+    nodeId: `s=${city_name}-Pressure`,
+    dataType: "Double",
 
-        value: {refreshFunc: getWeatherData(opcua.dataType.Double, city, "humidity") }
-    });
+    value: {
+    refreshFunc: async (callback) => {
+      returnValue = await getWeather.execution(city_name);
+      let preValue = parseFloat(returnValue.pressure);
+      callback(null, new opcua.DataValue({
+            value: new opcua.Variant({dataType: opcua.DataType.Double, value: preValue}),
+            statusCode: opcua.StatusCodes.Good,
+            sourceTimestamp: new Date(),
+          })
+        );
+    }
+  }
+});
+
+   // umidità
+   namespace.addVariable({
+    componentOf: cityNode,
+    browseName: "humidity",
+    nodeId: `s=${city_name}-Humidity`,
+    dataType: "Double",
+
+    value: {
+    refreshFunc: async (callback) => {
+      returnValue = await getWeather.execution(city_name);
+      let humValue = parseFloat(returnValue.humidity);
+      callback(null, new opcua.DataValue({
+            value: new opcua.Variant({dataType: opcua.DataType.Double, value: humValue}),
+            statusCode: opcua.StatusCodes.Good,
+            sourceTimestamp: new Date(),
+          })
+        );
+    }
+  }
+});
+
 
     // Weather
     namespace.addVariable({
         componentOf: cityNode,
         browseName: "weather",
-        nodeId: `s=${city}-Weather`,
+        nodeId: `s=${city_name}-Weather`,
         dataType: "String",
-
-        value: {refreshFunc : getWeatherData(opcua.dataType.String, city, "weather") }
+    
+        value: {
+        refreshFunc: async (callback) => {
+          returnValue = await getWeather.execution(city_name);
+          let weaValue = String(returnValue.weather);
+          callback(null, new opcua.DataValue({
+                value: new opcua.Variant({dataType: opcua.DataType.String, value: weaValue}),
+                statusCode: opcua.StatusCodes.Good,
+                sourceTimestamp: new Date(),
+              })
+            );
+        }
+      }
     });
-    }
-}
+
+}}
 
 // inizializzazione del server
 server.initialize(() => {
