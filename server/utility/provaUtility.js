@@ -4,6 +4,7 @@ const fs = require("fs");
 const key = fs.readFileSync("./openWeatherAPI.key");
 const unirest = require("unirest");
 const cities = require("./cities_list");
+const opcua = require("node-opcua");
 
 //funzione per il recupero delle previsioni meteo
 let getCityWeather = async (city) => {
@@ -51,9 +52,9 @@ setInterval(async () => {
 
 
 // costruisco una map in cui raccogliere le informazioni di ogni citta
-city_map = [];
+const city_map = {};
 
-const next_city  = ((arr) => {
+/* const next_city  = ((arr) => {
     let counter = arr.length;
     return function() {
        counter += 1;
@@ -62,7 +63,7 @@ const next_city  = ((arr) => {
        }
        return arr[counter];
     };
-})(cities);
+})(cities); */
 
  async function update_city_data(city) {
 
@@ -77,10 +78,24 @@ const next_city  = ((arr) => {
 }
 
 // effettuo una chiamata API ogni 5 secondi (non intaso il web server di richieste)
-setInterval(async () => {
-     const city = next_city();
-     console.log("updating city =",city);
-     console.log(city_map[city]);
-     await update_city_data(city);
-}, 5*1000);
+/* function fill_map() {
+    const interval = 5*1000;
+    setInterval(async () => {
 
+         const city = next_city();
+         console.log("updating city =",city);
+         await update_city_data(city);
+
+        // console.log(city_map[city]);
+    }, interval);  
+} */
+
+
+// ritorno i dati in base alla citta 
+module.exports = async function getValues(city_name) {
+
+    await update_city_data(city_name);
+    // const value = city[property];
+    console.log(city_map[city_name])
+
+    }

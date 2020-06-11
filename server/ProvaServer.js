@@ -1,5 +1,6 @@
 const opcua = require("node-opcua");
-const meteoParser = require("./utility/meteoParser.js")
+let getWeatherData = require("./utility/provaUtility");
+const cities = require("./utility/cities_list");
 
 // parametri da passare per la creazione del server
 const conn_par = {
@@ -20,101 +21,46 @@ let build_my_address_space = (server) => {
     const addressSpace = server.engine.addressSpace;
     const namespace = addressSpace.getOwnNamespace();
 
-    //dichiarare i nuovi oggetti
-    const device = namespace.addObject({
+    const citiesNode = namespace.addObject({
         organizedBy: addressSpace.rootFolder.objects,
-        browseName: "MyObjectDevice",
-    });
-
+        browseName: "Cities"});
+    
+    for (let city of cities) {
+        const cityNode = namespace.addObject({
+            organizedBy: citiesNode,
+            browseName: city});
 
     // variabili
     // temperatura
     namespace.addVariable({
-        componentOf: device,
+        componentOf: cityNode,
         browseName: "temperature",
-        nodeId: "s=Temperature",
-        dataType: "Float",
+        nodeId: `s=${city}-Temperature`,
+        dataType: "Double",
 
-        value: {
-            refreshFunc: function(callback) {
-
-                let temperature = meteoParser.getTemperature();
-                let DataValue = new opcua.DataValue({
-                     value: new opcua.Variant({ dataType: opcua.DataType.Float, value: temperature}),
-                     statusCode: opcua.StatusCodes.Good,
-                     sourceTimestamp: new Date()
-                });
-                
-                callback(null, DataValue);
-            }
-        }
+        value: {refreshFunc : getWeatherData(opcua.dataType.Double, city, "temperature") }
     });
 
     // umidità
     namespace.addVariable({
-        componentOf: device,
+        componentOf: cityNode,
         browseName: "humidity",
-        nodeId: "s=Humidity",
+        nodeId: `s=${city}-Humidity`,
         dataType: "Double",
 
-        value: {
-            refreshFunc: function(callback) {
-
-                let humidity = meteoParser.getHumidity();
-                let DataValue = new opcua.DataValue({
-                     value: new opcua.Variant({ dataType: opcua.DataType.Double, value: humidity}),
-                     statusCode: opcua.StatusCodes.Good,
-                     sourceTimestamp: new Date()
-                });
-
-                callback(null, DataValue);
-            }
-        }
+        value: {refreshFunc: getWeatherData(opcua.dataType.Double, city, "humidity") }
     });
 
-    // pressione
+    // Weather
     namespace.addVariable({
-        componentOf: device,
-        browseName: "pressure",
-        nodeId: "s=Pressure",
-        dataType: "Double",
-
-        value: {
-            refreshFunc: function(callback) {
-
-                let pressure = meteoParser.getPressure();
-                let DataValue = new opcua.DataValue({
-                     value: new opcua.Variant({ dataType: opcua.DataType.Double, value: pressure}),
-                     statusCode: opcua.StatusCodes.Good,
-                     sourceTimestamp: new Date()
-                });
-                
-                callback(null, DataValue);
-            }
-        }
-    });
-
-    // tempo
-    namespace.addVariable({
-        componentOf: device,
+        componentOf: cityNode,
         browseName: "weather",
-        nodeId: "s=Weather",
+        nodeId: `s=${city}-Weather`,
         dataType: "String",
 
-        value: {
-            refreshFunc: function(callback) {
-
-                let weahter = meteoParser.getWeather();
-                let DataValue = new opcua.DataValue({
-                     value: new opcua.Variant({ dataType: opcua.DataType.String, value: weahter}),
-                     statusCode: opcua.StatusCodes.Good,
-                     sourceTimestamp: new Date()
-                });
-                
-                callback(null, DataValue);
-            }
-        }
+        value: {refreshFunc : getWeatherData(opcua.dataType.String, city, "weather") }
     });
+    }
 }
 
 // inizializzazione del server
