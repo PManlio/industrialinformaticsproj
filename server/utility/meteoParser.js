@@ -52,7 +52,7 @@ module.exports = {
     },
     getWeather: async (callback) => {
         let datiMeteo = await esecuzione();
-        let weatValue = toString(datiMeteo.weather);
+        let weatValue = String(datiMeteo.weather);
 
         let returnValue = new opcua.DataValue({
             value: new opcua.Variant({dataType: opcua.DataType.String, value: weatValue}),
