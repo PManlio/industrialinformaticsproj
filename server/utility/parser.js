@@ -1,4 +1,4 @@
-const getValues = require("./provaUtility.js")
+const getValues = require("./utility.js")
 const opcua = require("node-opcua");
 /* 
 // test query
