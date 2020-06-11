@@ -44,7 +44,6 @@ let extractUsefulData = async(city) => {
 module.exports = {
     execution: async (city) => {
         const roba = await extractUsefulData(city);
-        // console.log(roba);s
         return roba;
     }
 }
