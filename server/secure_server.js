@@ -3,17 +3,21 @@ const cities = require("./utility/cities_list");
 const getWeather = require("./utility/utility");
 const { SecurityPolicy, MessageSecurityMode } = require("node-opcua");
 
+let user = require('./autenticazione/schema/user.js');
+let query = require('./autenticazione/db/connection.js');
+
 // funzione per la gestione del login al server (singolo user -> inserire lettura MongoDB)
 const userManager = {
-    isValidUser: (userName, password) => {
-        if (userName === "user1" && password === "password1") {
-            return true;
-        }
-        if (userName === "user2" && password === "password2") {
-            return true;
-        }
-        return false;
+  isValidUser: async (userName, password) => {
+    user = await query.findUser(userName, password)
+    if (user.username === "test_user" && user.password === "test") {
+      return true;
     }
+    /*if (userName === "user2" && password === "password2") {
+      return true;
+    } */
+    return false;
+  }
 };
 
 // certificato e private key (maybe useless)
@@ -23,17 +27,17 @@ const server_certificate_privatekey_file = constructFilename("certificates/serve
 // parametri da passare per la creazione del server sicuro
 const conn_par = {
 
-    securityPolicies: [
-        SecurityPolicy.Basic128Rsa15,
-        SecurityPolicy.Basic256
-    ],
+  securityPolicies: [
+    SecurityPolicy.Basic128Rsa15,
+    SecurityPolicy.Basic256
+  ],
 
-    SecurityModes: [
-        MessageSecurityMode.Sign,
-        MessageSecurityMode.SignAndEncrypt
-    ],
-    
-    port: 5000,
+  SecurityModes: [
+    MessageSecurityMode.Sign,
+    MessageSecurityMode.SignAndEncrypt
+  ],
+
+  port: 5000,
 
 
   resourcePath: "/UA/IndustrialInformaticsServer",
@@ -165,7 +169,7 @@ setInterval(((callback) => {
     else {
       callback(null, result);
     }
-  } 
+  }
 }), 3000);
 
 // inizializzazione del server
@@ -185,7 +189,4 @@ server.initialize(() => {
             ${server.endpoints[0].endpointDescriptions()[0].endpointUrl}
         Press Ctrl+C to stop server`);
   });
-
-
-
 });
