@@ -10,12 +10,9 @@ let query = require('./autenticazione/db/connection.js');
 const userManager = {
   isValidUser: async (userName, password) => {
     user = await query.findUser(userName, password)
-    if (user.username === "test_user" && user.password === "test") {
+    if (user) {
       return true;
     }
-    /*if (userName === "user2" && password === "password2") {
-      return true;
-    } */
     return false;
   }
 };
