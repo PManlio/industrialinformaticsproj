@@ -15,17 +15,21 @@ module.exports = {
             let database = client.db(mutils.dbn);
             let collection = database.collection('user');
 
-            let query = {username: userName, password: password};
+            let query = {username: userName/*, password: password*/};
             let res = await collection.find(query).toArray();
-
+            
             let res_data = JSON.stringify(res[0]);
             let parsed_data = JSON.parse(res_data);
 
-            user = {
-                _id:        String(parsed_data._id),
-                username:   parsed_data.username,
-                password:   parsed_data.password
-            };
+            if(parsed_data.password != password) {
+                user = null;
+            } else {
+                user = {
+                    _id:        String(parsed_data._id),
+                    username:   parsed_data.username,
+                    password:   parsed_data.password
+                };
+            }
         } 
         catch (err) {
             console.log(err);
