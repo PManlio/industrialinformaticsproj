@@ -27,7 +27,10 @@ module.exports = {
                 password:   parsed_data.password
             };
         } 
-        catch (err) {console.log(err)}
+        catch (err) {
+            console.log(err);
+            user = null;
+        }     
         finally {
             client.close();
             return user;

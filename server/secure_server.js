@@ -3,17 +3,20 @@ const cities = require("./utility/cities_list");
 const getWeather = require("./utility/utility");
 const { SecurityPolicy, MessageSecurityMode } = require("node-opcua");
 
-let user = require('./autenticazione/schema/user.js');
+//let user = require('./autenticazione/schema/user.js');
 let query = require('./autenticazione/db/connection.js');
 
 // funzione per la gestione del login al server (singolo user -> inserire lettura MongoDB)
-const userManager = {
-  isValidUser: async (userName, password) => {
-    user = await query.findUser(userName, password)
-    if (user) {
-      return true;
-    }
-    return false;
+let userManager = {
+  isValidUserAsync: (userName, password, callback) => {
+    query.findUser(userName, password)
+    .then((user) => {
+      callback(null, user);
+    })
+    .catch((err) => {
+      console.log(err);
+      callback(err, null);
+    })
   }
 };
 
@@ -23,7 +26,7 @@ const server_certificate_privatekey_file = constructFilename("certificates/serve
 
 // parametri da passare per la creazione del server sicuro
 const conn_par = {
-
+/*
   securityPolicies: [
     SecurityPolicy.Basic128Rsa15,
     SecurityPolicy.Basic256
@@ -33,10 +36,13 @@ const conn_par = {
     MessageSecurityMode.Sign,
     MessageSecurityMode.SignAndEncrypt
   ],
-
+*/
   port: 5000,
-
-
+/*
+  serverCertificateManager: {
+    //automatically trust certificate: true
+  },
+*/
   resourcePath: "/UA/IndustrialInformaticsServer",
   buildInfo: {
     productName: "OPCUAProjectServer",
