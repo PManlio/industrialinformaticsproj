@@ -24,7 +24,7 @@ let userManager = {
 const certificateManager = new opcua.OPCUACertificateManager({
   automaticallyAcceptUnknownCertificate: true,
 
-  rootFolder: path.join("./node_modules/node-opcua-server", "certificate"),
+  rootFolder: path.join("./", "certificate"),
 });
 
 // parametri da passare per la creazione del server sicuro
