@@ -1,7 +1,8 @@
 const opcua = require("node-opcua");
 const cities = require("./utility/cities_list");
 const getWeather = require("./utility/utility");
-const { SecurityPolicy, MessageSecurityMode } = require("node-opcua");
+const path = require("path");
+
 
 //let user = require('./autenticazione/schema/user.js');
 let query = require('./autenticazione/db/connection.js');
@@ -20,29 +21,19 @@ let userManager = {
   }
 };
 
-// certificato e private key (maybe useless)
-/* const server_certificate_file = constructFilename("certificates/server_selfsigned_cert_2048.pem");
-const server_certificate_privatekey_file = constructFilename("certificates/server_key_2048.pem"); */
+const certificateManager = new opcua.OPCUACertificateManager({
+  automaticallyAcceptUnknownCertificate: true,
+
+  rootFolder: path.join("./node_modules/node-opcua-server", "certificate"),
+});
 
 // parametri da passare per la creazione del server sicuro
 const conn_par = {
-/*
-  securityPolicies: [
-    SecurityPolicy.Basic128Rsa15,
-    SecurityPolicy.Basic256
-  ],
 
-  SecurityModes: [
-    MessageSecurityMode.Sign,
-    MessageSecurityMode.SignAndEncrypt
-  ],
-*/
   port: 5000,
-/*
-  serverCertificateManager: {
-    //automatically trust certificate: true
-  },
-*/
+
+  serverCertificateManager: certificateManager,
+
   resourcePath: "/UA/IndustrialInformaticsServer",
   buildInfo: {
     productName: "OPCUAProjectServer",
