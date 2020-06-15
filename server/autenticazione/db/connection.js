@@ -15,7 +15,7 @@ module.exports = {
             let database = client.db(mutils.dbn);
             let collection = database.collection('user');
 
-            let query = {username: userName/*, password: password*/};
+            let query = {username: userName};
             let res = await collection.find(query).toArray();
             
             let res_data = JSON.stringify(res[0]);
