@@ -3,6 +3,8 @@ const cities = require("./utility/cities_list");
 const getWeather = require("./utility/utility");
 const path = require("path");
 
+let PORT =  parseInt(process.env.PORT) || 80;
+console.log("la porta è" + PORT);
 
 //let user = require('./autenticazione/schema/user.js');
 let query = require('./autenticazione/db/connection.js');
@@ -30,7 +32,7 @@ const certificateManager = new opcua.OPCUACertificateManager({
 // parametri da passare per la creazione del server sicuro
 const conn_par = {
 
-  port: process.env.PORT || 5000,
+  port: PORT,
 
   serverCertificateManager: certificateManager,
 
@@ -173,14 +175,17 @@ server.initialize(() => {
   // riempiamo l'address space
   build_my_address_space(server);
   console.log("Address space initialized. Starting server...");
+  
 
   // avviamo il server:
   server.start(() => {
+
     console.log(`Server started.
         listening to port: 
             ${server.endpoints[0].port}
         pimary server endpoint url is:
             ${server.endpoints[0].endpointDescriptions()[0].endpointUrl}
         Press Ctrl+C to stop server`);
+        console.log(process.env.PORT);
   });
 });
