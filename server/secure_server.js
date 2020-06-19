@@ -30,7 +30,7 @@ const certificateManager = new opcua.OPCUACertificateManager({
 // parametri da passare per la creazione del server sicuro
 const conn_par = {
 
-  port: process.env.PORT || 5000,
+  port: /*process.env.PORT ||, */ 29032,// 5000
 
   serverCertificateManager: certificateManager,
 
