@@ -3,13 +3,13 @@ const cities = require("./utility/cities_list");
 const getWeather = require("./utility/utility");
 const path = require("path");
 
-let PORT =  parseInt(process.env.PORT) || 80;
-console.log("la porta è" + PORT);
+// assegnazione della porta per deploy/localhost
+let PORT =  parseInt(process.env.PORT) || 5000;
 
 //let user = require('./autenticazione/schema/user.js');
 let query = require('./autenticazione/db/connection.js');
 
-// funzione per la gestione del login al server (singolo user -> inserire lettura MongoDB)
+// funzione per la gestione del login al server
 let userManager = {
   isValidUserAsync: (userName, password, callback) => {
     query.findUser(userName, password)
@@ -23,9 +23,9 @@ let userManager = {
   }
 };
 
+// funzione per la gestione dei certificati 
 const certificateManager = new opcua.OPCUACertificateManager({
   automaticallyAcceptUnknownCertificate: true,
-
   rootFolder: path.join("./", "certificate"),
 });
 
@@ -186,6 +186,5 @@ server.initialize(() => {
         pimary server endpoint url is:
             ${server.endpoints[0].endpointDescriptions()[0].endpointUrl}
         Press Ctrl+C to stop server`);
-        console.log(process.env.PORT);
   });
 });
