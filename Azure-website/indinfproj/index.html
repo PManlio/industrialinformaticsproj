@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    
+    <title>Industrial Informatics</title>
+</head>
+<body>
+
+    <div class="jumbotron jumbotron-fluid text-center bg-dark text-white">
+        <h1>Industrial Informatics</h1>
+        <p>Client/Server application in OPC UA</p> 
+        <p>Claudio Curto - Manlio Puglisi</p>
+    </div>
+    
+
+    <div class="row d-flex justify-content-center">
+
+        <!--Grid column-->
+        <div class="col-md-6 text-center">
+      
+            <h3> <a href="https://github.com/PManlio/industrialinformaticsproj" class="text-decoration-none">Github Project Page</a></h3>
+            <p>Effettuare il Login per accedere al Server OPC</p>
+            <p>Le credenziali vengono fornite dai creatori del progetto.</p>
+      
+        </div>
+        <!--Grid column-->
+      
+    </div>
+    
+    <!--Login form-->
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                <form action="https://indinfproj.azurewebsites.net/" method="POST">
+                    <div class="form-group">
+                        <input _ngcontent-c0="" class="form-control form-control-lg" placeholder="Username" name="username" type="text">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" placeholder="Password" name="password" type="password">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-info btn-lg btn-block">Sign In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,2 @@
+web-serv: npm start
+web-clie: node app.js
