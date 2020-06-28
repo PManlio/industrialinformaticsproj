@@ -1,0 +1,26 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "secure_server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node secure_server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@azure/event-hubs": "^5.2.1",
+        "async": "^3.2.0",
+        "azure-iot-device": "^1.16.0",
+        "azure-iot-device-http": "^1.12.3",
+        "mongodb": "^3.5.8",
+        "node-opcua": "^2.7.0",
+        "source-map-support": "^0.5.19",
+        "unirest": "^0.6.0"
+    },
+    "engines": {
+        "node": "12.7.0"
+    }
+}
